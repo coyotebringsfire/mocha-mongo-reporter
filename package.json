@@ -1,11 +1,13 @@
 {
   "name": "mongoreporter",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "mocha reporter to mongo backend",
   "main": "mocha-mongo-reporter.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords":["mongo", "mocha", "reporter", "ci"],
+  "readme":"README.md",
   "author": "aumkara@gmail.com",
   "license": "ISC",
   "dependencies": {
