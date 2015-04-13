@@ -1,6 +1,6 @@
 {
   "name": "mongoreporter",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "mocha reporter to mongo backend",
   "main": "mocha-mongo-reporter.js",
   "scripts": {
