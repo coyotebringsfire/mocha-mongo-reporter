@@ -14,5 +14,9 @@
     "debug": "^2.1.3",
     "mongodb": "^2.0.27",
     "q": "^1.2.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://bitbucket.org/coyotebringsfire/mochamongoreporter.git"
+  },
 }
