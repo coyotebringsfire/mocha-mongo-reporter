@@ -1,0 +1,16 @@
+{
+  "name": "mongoreporter",
+  "version": "0.0.13",
+  "description": "mocha reporter to mongo backend",
+  "main": "mocha-mongo-reporter.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "aumkara@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "debug": "^2.1.3",
+    "mongodb": "^2.0.27",
+    "q": "^1.2.0"
+  }
+}
