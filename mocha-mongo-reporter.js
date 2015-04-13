@@ -33,12 +33,12 @@ function mocha_mongo_reporter(runner) {
 
   runner.on('pass', function(test){
     now=new Date();
-    passes.push({"timestamp":dateFormat(now, "isoDateTime"), suite:test.fullTitle().match(new RegExp("(.*) "+test.title))[1], test:test.title, duration:test.duration, pass:true});
+    passes.push({"timestamp":dateFormat(now, "isoDateTime", true), suite:test.fullTitle().match(new RegExp("(.*) "+test.title))[1], test:test.title, duration:test.duration, pass:true});
   });
 
   runner.on('fail', function(test, err){
     now=new Date();
-    failures.push({"timestamp":dateFormat(now, "isoDateTime"), suite:test.fullTitle().match(new RegExp("(.*) "+test.title))[1], test:test.title, duration:test.duration, pass:false, err:err.message});
+    failures.push({"timestamp":dateFormat(now, "isoDateTime", true), suite:test.fullTitle().match(new RegExp("(.*) "+test.title))[1], test:test.title, duration:test.duration, pass:false, err:err.message});
   });
 
   runner.on('end', function(){
