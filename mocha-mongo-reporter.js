@@ -1,6 +1,7 @@
 var debug=require('debug')('mocha:mongoreporter'),
     Q=require('q'),
-    mongo=require('mongodb');
+    mongo=require('mongodb'),
+    dateFormat=require('dateFormat'), now;
 
 module.exports = mocha_mongo_reporter;
 
@@ -31,11 +32,13 @@ function mocha_mongo_reporter(runner) {
   });
 
   runner.on('pass', function(test){
-    passes.push({suite:test.fullTitle().match(new RegExp("(.*) "+test.title))[1], test:test.title, duration:test.duration, pass:true});
+    now=new Date();
+    passes.push({"timestamp":dateFormat(now, "isoDateTime"), suite:test.fullTitle().match(new RegExp("(.*) "+test.title))[1], test:test.title, duration:test.duration, pass:true});
   });
 
   runner.on('fail', function(test, err){
-    failures.push({suite:test.fullTitle().match(new RegExp("(.*) "+test.title))[1], test:test.title, duration:test.duration, pass:false, err:err.message});
+    now=new Date();
+    failures.push({"timestamp":dateFormat(now, "isoDateTime"), suite:test.fullTitle().match(new RegExp("(.*) "+test.title))[1], test:test.title, duration:test.duration, pass:false, err:err.message});
   });
 
   runner.on('end', function(){
