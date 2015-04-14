@@ -16,3 +16,12 @@ var mocha = new Mocha({
     reporter: "mongoreporter"
 });
 ```
+
+I like to use this with mocha-multi reporter, using spec to print test results, something like this
+```sh
+$ npm install mocha-multi
+...
+$ npm install mongoreporter
+...
+$ MONGOURL="mongodb://localhost:27017" multi="spec=- mongoreporter=/dev/null" mocha -R mocha-multi
+```
