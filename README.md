@@ -23,5 +23,5 @@ $ npm install mocha-multi
 ...
 $ npm install mongoreporter
 ...
-$ MONGOURL="mongodb://localhost:27017" multi="spec=- mongoreporter=/dev/null" mocha -R mocha-multi
+$ MONGOURL="mongodb://localhost:27017/testruns" multi="spec=- mongoreporter=/dev/null" mocha -R mocha-multi
 ```
