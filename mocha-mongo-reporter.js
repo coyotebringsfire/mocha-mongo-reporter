@@ -46,7 +46,9 @@ function mocha_mongo_reporter(runner) {
     runnerEnd.resolve({});
   });
 
-  Q.all([runnerEnd.promise, mongoConnect.promise]).then( updateDB );
+  Q.all([runnerEnd.promise, mongoConnect.promise]).then( updateDB, function() {
+    debug("error connecting to mongo");
+  });
 
   function updateDB() {
     var allDeferreds=[];
