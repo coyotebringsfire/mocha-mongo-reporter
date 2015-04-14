@@ -6,7 +6,7 @@ A reporter for mocha that stores results directly to a mongo db
 ```sh
 $ npm install mongoreporter
 ...
-$ MONGOURL=mongodb://dbuser:dbpassword@dbhost:dbport/dbname mocha -R mongoreporter
+$ MONGOURL=mongodb://dbuser:dbpassword@dbhost:dbport/dbname mocha -R mongoreporter test/one.js
 ```
 programmatically:
 ```sh
