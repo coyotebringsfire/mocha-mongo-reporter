@@ -23,7 +23,7 @@ function mocha_mongo_reporter(runner) {
 
   mongo.MongoClient.connect(mongoUrl, function(err, _db) {
     if(err) {
-      mongoConnect.reject();
+      mongoConnect.reject(err);
       throw err;
     }
     debug("connected to mongo");
