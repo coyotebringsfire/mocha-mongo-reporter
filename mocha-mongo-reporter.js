@@ -62,7 +62,11 @@ function mocha_mongo_reporter(runner) {
         deferred.resolve(results);
       });
     });
-    Q.all(allDeferreds).then(function() {
+    Q.all(allDeferreds).then(function allDBUpdatesDone() {
+      db.close();
+      process.exit(failures.length);
+    }, function onDBErr(err) {
+      debug("error saving to mongo: %j", err);
       db.close();
       process.exit(failures.length);
     });
