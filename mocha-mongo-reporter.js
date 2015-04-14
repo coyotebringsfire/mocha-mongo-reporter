@@ -46,7 +46,7 @@ function mocha_mongo_reporter(runner) {
     runnerEnd.resolve({});
   });
 
-  Q.all([runnerEnd.promise, mongoConnect.promise]).then( updateDB, function() {
+  Q.all([runnerEnd.promise, mongoConnect.promise]).then( updateDB, function onRejectedPromise() {
     debug("error connecting to mongo");
   });
 
