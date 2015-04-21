@@ -2,19 +2,32 @@ var debug=require('debug')('mocha:mongoreporter'),
     Q=require('q'),
     mongo=require('mongodb'),
     dateFormat=require('dateFormat'), now;
+    os=require('os');
 
 module.exports = mocha_mongo_reporter;
 
-function mocha_mongo_reporter(runner) {
+function mocha_mongo_reporter(runner, options) {
   var db = null;
 
   var passes = [];
   var failures = [];
 
+  var meta = { 
+    user: process.env["USER"], 
+    host: os.hostname(), 
+    type: os.type(), 
+    platform: os.platform(), 
+    arch: os.arch(), 
+    release: os.release(), 
+    totalmem: os.totalmem(), 
+    freemem: os.freemem(), 
+    cpus: os.cpus()
+  };
+
   var runnerEnd=Q.defer(), 
       mongoConnect=Q.defer();
 
-  var mongoUrl=process.env['MONGOURL'];
+  var mongoUrl=( options && options.url ) || process.env['MONGOURL'];
   debug("connecting to %s", mongoUrl);
 
   if(!(this instanceof mocha_mongo_reporter)) {
@@ -33,12 +46,27 @@ function mocha_mongo_reporter(runner) {
 
   runner.on('pass', function(test){
     now=new Date();
-    passes.push({"timestamp":dateFormat(now, "isoDateTime", true), suite:test.fullTitle().match(new RegExp("(.*) "+test.title))[1], test:test.title, duration:test.duration, pass:true});
+    meta.timestamp=dateFormat(now, "isoDateTime", true);
+    passes.push({ 
+      suite:test.fullTitle().match(new RegExp("(.*) "+test.title))[1], 
+      test:test.title, 
+      duration:test.duration, 
+      pass:true, 
+      meta:meta
+    });
   });
 
   runner.on('fail', function(test, err){
     now=new Date();
-    failures.push({"timestamp":dateFormat(now, "isoDateTime", true), suite:test.fullTitle().match(new RegExp("(.*) "+test.title))[1], test:test.title, duration:test.duration, pass:false, err:err.message});
+    meta.timestamp=dateFormat(now, "isoDateTime", true);
+    failures.push({
+      suite:test.fullTitle().match(new RegExp("(.*) "+test.title))[1], 
+      test:test.title, 
+      duration:test.duration, 
+      pass:false, 
+      err:err.message, 
+      meta:meta
+    });
   });
 
   runner.on('end', function(){
@@ -57,6 +85,8 @@ function mocha_mongo_reporter(runner) {
       var deferred=Q.defer();
       allDeferreds.push(deferred.promise);
       debug("testrun to insert: %s", JSON.stringify(test));
+      if(options.meta===false)
+        test.meta=undefined;
       db.collection("testruns").insert(test, function mongoInsertCallback(err, results) {
         if(err) deferred.reject(err);
         deferred.resolve(results);
