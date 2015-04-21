@@ -13,7 +13,11 @@ $ MONGOURL=mongodb://dbuser:dbpassword@dbhost:dbport/dbname mocha -R mongoreport
 process.env["MONGOURL"]="mongodb://dbuser:dbpassword@dbhost:dbport/dbname mocha -R mongoreporter";
 var mocha = new Mocha({
     ui: 'bdd',
-    reporter: "mongoreporter"
+    reporter: "mongoreporter",
+    reporterOption: {
+    	url: "mongodb://dbuser:dbpassword@dbhost:dbport/dbname"
+	}
+}
 });
 ```
 
