@@ -1,8 +1,9 @@
-var debug=require('debug')('mocha:mongoreporter'),
-    Q=require('q'),
-    mongo=require('mongodb'),
-    dateFormat=require('dateFormat'), now;
-    os=require('os');
+var debug       = require('debug')('mocha:mongoreporter'),
+    Q           = require('q'),
+    mongo       = require('mongodb'),
+    dateFormat  = require('dateFormat'), now;
+    os          = require('os'),
+    snap        = require('env-snapshot').EnvSnapshot();
 
 module.exports = mocha_mongo_reporter;
 
@@ -13,15 +14,15 @@ function mocha_mongo_reporter(runner, options) {
   var failures = [];
 
   var meta = { 
-    user: process.env["USER"], 
-    host: os.hostname(), 
-    type: os.type(), 
-    platform: os.platform(), 
-    arch: os.arch(), 
-    release: os.release(), 
-    totalmem: os.totalmem(), 
-    freemem: os.freemem(), 
-    cpus: os.cpus()
+    user: snap.process_env["USER"], 
+    host: snap.os_hostname, 
+    type: snap.os_type, 
+    platform: snap.os_platform, 
+    arch: snap.os_arch, 
+    release: snap.os_release, 
+    totalmem: snap.os_totalmem, 
+    freemem: snap.os_freemem, 
+    cpus: snap.os_cpus
   };
 
   var runnerEnd=Q.defer(), 
