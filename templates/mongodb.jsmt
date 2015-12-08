@@ -1,0 +1,11 @@
+{ 
+    user: {{user}}, 
+    host: {{host}}, 
+    type: {{type}}, 
+    platform: {{platform}}, 
+    arch: {{arch}}, 
+    release: {{release}}, 
+    totalmem: {{totalmem}}, 
+    freemem: {{freemem}}, 
+    cpus: {{cpus}}
+}
