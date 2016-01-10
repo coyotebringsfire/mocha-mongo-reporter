@@ -1,5 +1,4 @@
 var debug       = require('debug')('mocha:mongoreporter'),
-    Q           = require('q'),
     mongo       = require('mongodb'),
     dateFormat  = require('dateFormat'), now;
     os          = require('os'),
@@ -25,25 +24,31 @@ function mocha_mongo_reporter(runner, options) {
     cpus: snap.os_cpus
   };
 
-  var runnerEnd=Q.defer(), 
-      mongoConnect=Q.defer();
-
   var mongoUrl=( options && options.url ) || process.env['MONGOURL'];
   debug("connecting to %s", mongoUrl);
+
+  var runnerEnd = new Promise( function(resolve, reject) {
+    runner.on('end', function(){
+      debug("runner.end");
+      resolve("runner ended");
+    });
+  }), mongoConnect = new Promise( function(resolve, reject) {
+    debug("connecting to %j", mongoUrl);
+    mongo.MongoClient.connect(mongoUrl, function(err, _db) {
+      if(err) {
+        debug("error connecting to mongo %j", err);
+        reject(err);
+        throw err;
+      }
+      db = _db;
+      debug("connected to mongo");
+      resolve({});
+    });
+  });
 
   if(!(this instanceof mocha_mongo_reporter)) {
     return new mocha_mongo_reporter(runner);
   }
-
-  mongo.MongoClient.connect(mongoUrl, function(err, _db) {
-    if(err) {
-      mongoConnect.reject(err);
-      throw err;
-    }
-    debug("connected to mongo");
-    mongoConnect.resolve({});
-    db = _db;
-  });
 
   runner.on('pass', function(test){
     now=new Date();
@@ -70,34 +75,34 @@ function mocha_mongo_reporter(runner, options) {
     });
   });
 
-  runner.on('end', function(){
-    debug("runner.end");
-    runnerEnd.resolve({});
-  });
-
-  Q.all([runnerEnd.promise, mongoConnect.promise]).then( updateDB, function onRejectedPromise() {
-    debug("error connecting to mongo");
+  runnerEnd.then( function() { 
+    debug("runnerEnd"); 
+    updateDB(); 
+  }, function onRejectedPromise(err) {
+    debug("error connecting to mongo : %s", err.message);
   });
 
   function updateDB() {
     var allDeferreds=[];
-    debug("updating db, %s %s", passes, failures);
+    debug("updating db");
     passes.concat(failures).forEach(function saveTestResults(test) {
-      var deferred=Q.defer();
-      allDeferreds.push(deferred.promise);
-      debug("testrun to insert: %s", JSON.stringify(test));
-      if(options.meta===false)
-        test.meta=undefined;
-      db.collection("testruns").insert(test, function mongoInsertCallback(err, results) {
-        if(err) deferred.reject(err);
-        deferred.resolve(results);
+      var _test = test;
+      var deferred = new Promise(function(resolve, reject) {
+        debug("testrun to insert: %s", JSON.stringify(_test));
+        if(options.meta===false)
+          _test.meta=undefined;
+        db.collection("testruns").insert(_test, function mongoInsertCallback(err, results) {
+          if(err) return reject(err);
+          resolve(results);
+        });
       });
+      allDeferreds.push(deferred);
     });
-    Q.all(allDeferreds).then(function allDBUpdatesDone() {
+    Promise.all(allDeferreds).then(function allDBUpdatesDone() {
       db.close();
       process.exit(failures.length);
     }, function onDBErr(err) {
-      debug("error saving to mongo: %j", err);
+      debug("error saving to mongo: %s", err.message);
       db.close();
       process.exit(failures.length);
     });
