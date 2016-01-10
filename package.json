@@ -1,6 +1,6 @@
 {
   "name": "mongoreporter",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "mocha reporter to mongo backend",
   "main": "mocha-mongo-reporter.js",
   "scripts": {
@@ -25,7 +25,7 @@
     "type": "git",
     "url": "https://github.com/coyotebringsfire/mocha-mongo-reporter.git"
   },
-  "engines" : { 
-    "node" : ">=4.0" 
+  "engines": {
+    "node": ">=4.0"
   }
 }
