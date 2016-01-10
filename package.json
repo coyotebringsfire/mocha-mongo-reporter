@@ -26,6 +26,6 @@
     "url": "https://github.com/coyotebringsfire/mocha-mongo-reporter.git"
   },
   "engines" : { 
-    "node" : ">=4.2" 
+    "node" : ">=4.0" 
   }
 }
