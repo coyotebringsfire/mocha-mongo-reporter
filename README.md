@@ -3,10 +3,11 @@
 A reporter for mocha that stores results directly to a mongo db
 
 ##Usage
+Install mongoreporter from npm. When running from the command line, you have to specify --no-exit
 ```sh
 $ npm install mongoreporter
 ...
-$ MONGOURL=mongodb://dbuser:dbpassword@dbhost:dbport/dbname mocha -R mongoreporter test/one.js
+$ MONGOURL=mongodb://dbuser:dbpassword@dbhost:dbport/dbname mocha -R mongoreporter test/one.js --no-exit
 ```
 programmatically:
 ```sh
