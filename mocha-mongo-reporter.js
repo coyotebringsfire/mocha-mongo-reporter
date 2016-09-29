@@ -16,7 +16,7 @@ function mocha_mongo_reporter(runner, options) {
   var passes = [];
   var failures = [];
 
-  var meta = Mustache.render( fs.readFileSync( path.join(__dirname, "templates", "mongodb.jsmt") ).toString(), { 
+  var meta = JSON.parse( Mustache.render( fs.readFileSync( path.join(__dirname, "templates", "mongodb.jsmt") ).toString(), { 
     user: snap.process_env["USER"], 
     host: snap.os_hostname, 
     type: snap.os_type, 
@@ -26,7 +26,7 @@ function mocha_mongo_reporter(runner, options) {
     totalmem: snap.os_totalmem, 
     freemem: snap.os_freemem, 
     cpus: snap.os_cpus
-  });
+  }) );
 
   var runnerEnd=Q.defer(), 
       mongoConnect=Q.defer();
