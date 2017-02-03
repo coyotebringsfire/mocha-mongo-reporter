@@ -1,6 +1,6 @@
 var debug       = require('debug')('mocha:mongoreporter'),
     mongo       = require('mongodb'),
-    dateFormat  = require('dateFormat'), now;
+    dateFormat  = require('dateformat'), now;
     os          = require('os'),
     snap        = require('env-snapshot').EnvSnapshot();
 
@@ -12,15 +12,15 @@ function mocha_mongo_reporter(runner, options) {
   var passes = [];
   var failures = [];
 
-  var meta = { 
-    user: snap.process_env["USER"], 
-    host: snap.os_hostname, 
-    type: snap.os_type, 
-    platform: snap.os_platform, 
-    arch: snap.os_arch, 
-    release: snap.os_release, 
-    totalmem: snap.os_totalmem, 
-    freemem: snap.os_freemem, 
+  var meta = {
+    user: snap.process_env["USER"],
+    host: snap.os_hostname,
+    type: snap.os_type,
+    platform: snap.os_platform,
+    arch: snap.os_arch,
+    release: snap.os_release,
+    totalmem: snap.os_totalmem,
+    freemem: snap.os_freemem,
     cpus: snap.os_cpus
   };
 
@@ -53,11 +53,11 @@ function mocha_mongo_reporter(runner, options) {
   runner.on('pass', function(test){
     now=new Date();
     meta.timestamp=dateFormat(now, "isoDateTime", true);
-    passes.push({ 
-      suite:test.fullTitle().match(new RegExp("(.*) "+test.title))[1], 
-      test:test.title, 
-      duration:test.duration, 
-      pass:true, 
+    passes.push({
+      suite:test.fullTitle().match(new RegExp("(.*) "+test.title))[1],
+      test:test.title,
+      duration:test.duration,
+      pass:true,
       meta:meta
     });
   });
@@ -66,18 +66,18 @@ function mocha_mongo_reporter(runner, options) {
     now=new Date();
     meta.timestamp=dateFormat(now, "isoDateTime", true);
     failures.push({
-      suite:test.fullTitle().match(new RegExp("(.*) "+test.title))[1], 
-      test:test.title, 
-      duration:test.duration, 
-      pass:false, 
-      err:err.message, 
+      suite:test.fullTitle().match(new RegExp("(.*) "+test.title))[1],
+      test:test.title,
+      duration:test.duration,
+      pass:false,
+      err:err.message,
       meta:meta
     });
   });
 
-  runnerEnd.then( function() { 
-    debug("runnerEnd"); 
-    updateDB(); 
+  runnerEnd.then( function() {
+    debug("runnerEnd");
+    updateDB();
   }, function onRejectedPromise(err) {
     debug("error connecting to mongo : %s", err.message);
   });
