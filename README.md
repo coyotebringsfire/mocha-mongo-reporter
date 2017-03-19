@@ -1,15 +1,15 @@
-#mongoreporter
-##Description
-A reporter for mocha that stores results directly to a mongo db
+# mongoreporter  
+## Description  
+A reporter for mocha that stores results directly to a mongo db  
 
-##Usage
-Install mongoreporter from npm. When running from the command line, you have to specify --no-exit
-```sh
-$ npm install mongoreporter
-...
-$ MONGOURL=mongodb://dbuser:dbpassword@dbhost:dbport/dbname mocha -R mongoreporter test/one.js --no-exit
-```
-programmatically:
+## Usage  
+Install mongoreporter from npm. When running from the command line, you have to specify --no-exit  
+```sh  
+$ npm install mongoreporter  
+...  
+$ MONGOURL=mongodb://dbuser:dbpassword@dbhost:dbport/dbname mocha -R mongoreporter test/one.js --no-exit  
+```  
+programmatically:  
 ```sh
 var mocha = new Mocha({
     ui: 'bdd',
@@ -22,7 +22,7 @@ mocha.addFile("test/one.js");
 mocha.run(...);
 ```
 
-I like to use this with mocha-multi reporter, using spec to print test results, something like this
+I like to use this with mocha-multi reporter, using spec to print test results, something like this  
 ```sh
 $ npm install mocha-multi
 ...
